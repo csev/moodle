@@ -224,9 +224,16 @@ class toolproxy extends \mod_lti\local\ltiservice\resource_base {
                 $type->parameter = self::lti_extract_parameters($launchrequest->parameter);
 
                 if (!empty($tool->iconpath)) {
-                    $type->icon = "{$baseurl}{$tool->iconpath}";
-                    if (!empty($securebaseurl)) {
-                        $type->secureicon = "{$securebaseurl}{$tool->iconpath}";
+                    if ( strpos($tool->iconpath, "http://") === 0 ) {
+                        $type->icon = "{$tool->iconpath}";
+                    } else if ( strpos($tool->iconpath, "https://") === 0 ) {
+                        $type->icon = "{$tool->iconpath}";
+                        $type->secureicon = "{$tool->iconpath}";
+                    } else {
+                        $type->icon = "{$baseurl}{$tool->iconpath}";
+                        if (!empty($securebaseurl)) {
+                            $type->secureicon = "{$securebaseurl}{$tool->iconpath}";
+                        }
                     }
                 }
 
